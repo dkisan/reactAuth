@@ -16,7 +16,13 @@ const AuthForm = () => {
   const formHandler = (event) => {
     event.preventDefault()
     setIsSending(true)
-    fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAY6PIq34nDju030WEkLJCKVdKmx_39C68', {
+    let url;
+    if (isLogin) {
+      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAY6PIq34nDju030WEkLJCKVdKmx_39C68'
+    } else {
+      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAY6PIq34nDju030WEkLJCKVdKmx_39C68'
+    }
+    fetch(url, {
       method: 'POST',
       body: JSON.stringify({
         email: emailRef.current.value,
@@ -27,16 +33,18 @@ const AuthForm = () => {
         'Content-Type': 'application/json'
       }
     })
-      .then(res => {
+      .then(async res => {
         setIsSending(false)
         if (res.ok) {
-console.log(res.json())
+          const data = await res.json()
+          console.log(data)
         } else {
           return res.json().then(data => {
             alert(data.error.message)
           })
         }
       })
+
 
   }
 
