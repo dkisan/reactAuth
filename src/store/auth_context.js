@@ -10,15 +10,27 @@ const AuthContext = React.createContext({
 export const AuthContextProvider = (props) => {
     const ltoken = localStorage.getItem('idToken')
     const [token, setToken] = useState(ltoken)
+
     const userisloggedin = !!token
+
+    useEffect(() => {
+        const t = new Date().getTime()
+        if (t > localStorage.getItem('autologout')) {
+            logoutHandler()
+        }
+    }, [])
 
     const loginHandler = (token) => {
         setToken(token)
+        let time = new Date().getTime()
+        time = time + 300000
         localStorage.setItem('idToken', token)
+        localStorage.setItem('autologout', time)
     }
     const logoutHandler = () => {
         setToken(null)
         localStorage.removeItem('idToken')
+        localStorage.removeItem('autologout')
     }
     const ctxValue = {
         token: token,
