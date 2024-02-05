@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom';
 
 import classes from './MainNavigation.module.css';
+import { useContext } from 'react';
+import AuthContext from '../../store/auth_context';
 
 const MainNavigation = () => {
+  const ctx = useContext(AuthContext)
+
   return (
     <header className={classes.header}>
       <Link to='/'>
@@ -11,13 +15,13 @@ const MainNavigation = () => {
       <nav>
         <ul>
           <li>
-            <Link to='/auth'>Login</Link>
+            {!ctx.isLoggedin && <Link to='/auth'>Login</Link>}
           </li>
           <li>
-            <Link to='/profile'>Profile</Link>
+            {ctx.isLoggedin && <Link to='/profile'>Profile</Link>}
           </li>
           <li>
-            <button>Logout</button>
+            {ctx.isLoggedin && <button onClick={ctx.logout}>Logout</button>}
           </li>
         </ul>
       </nav>
