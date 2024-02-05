@@ -44,7 +44,7 @@ const AuthForm = () => {
           const data = await res.json()
           if (isLogin) {
             authCtx.login(data.idToken)
-history.push('/profile')
+            history.push('/profile')
           } else {
             console.log(data)
           }
